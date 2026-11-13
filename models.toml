@@ -1,0 +1,43 @@
+# Models for the v0 showdown (ADR-0001, Iteration 2).
+#
+# Prices are $ per 1M tokens from OpenRouter's public model list, 2026-11-12
+# (scripts/ephemeral/2026-11-12-openrouter-price-scan.py). They are used ONLY
+# for the pre-run budget estimate; the cost recorded for each call is the one
+# OpenRouter reports in the response (usage.cost). Re-check before changing.
+#
+# Settings are vendor defaults (QST-RUN-SETTINGS = A): no temperature,
+# max_tokens or reasoning parameters are sent. The only routing constraint is
+# the DeepSeek provider pin below.
+
+[budget]
+total_usd = 10.00               # Irene's total budget
+stop_line_usd = 9.00            # refuse any run that could push spend past this
+est_output_tokens_per_model = 4000  # conservative: max_tokens is not sent
+
+[[models]]
+id = "anthropic/claude-haiku-5.5"
+price_in_per_m = 0.10
+price_out_per_m = 0.50
+
+[[models]]
+id = "openai/gpt-6-luna"
+price_in_per_m = 0.10
+price_out_per_m = 0.50
+
+[[models]]
+id = "google/gemini-3.1-flash-lite"
+price_in_per_m = 0.25
+price_out_per_m = 1.50
+
+[[models]]
+id = "deepseek/deepseek-v4.1-flash"
+price_in_per_m = 0.14   # DeepInfra fp8 endpoint price, not the headline price
+price_out_per_m = 0.42
+
+# Pinned to one provider (Irene's QST-MODEL-TRIO answer): 38 endpoints serve
+# this model at fp4..fp8; without a pin, runs could hit different precisions.
+# allow_fallbacks = false makes an outage fail visibly instead of rerouting.
+[models.provider]
+order = ["deepinfra"]
+quantizations = ["fp8"]
+allow_fallbacks = false

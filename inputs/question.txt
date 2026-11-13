@@ -1,0 +1,3 @@
+Using only the earnings snippet above, summarize this quarter's results.
+Cite the source label (e.g. [S1]) for every number you state.
+If you compute a number that is not in the snippet, show the inputs and cite their labels.

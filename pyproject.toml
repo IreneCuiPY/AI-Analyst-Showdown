@@ -1,0 +1,13 @@
+[project]
+name = "ai-analyst-showdown"
+version = "0.0.1"
+description = "Send the same earnings snippet to several LLMs via OpenRouter and compare how they analyze it (ADR-0001)."
+requires-python = ">=3.12,<3.13"
+dependencies = []  # runtime is stdlib only: urllib, tomllib, json
+
+[dependency-groups]
+dev = ["pytest>=8"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
