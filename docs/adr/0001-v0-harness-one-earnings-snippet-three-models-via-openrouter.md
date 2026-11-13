@@ -9,7 +9,7 @@ adr teaching map: the example is not the teaching — these are the up-links fro
 # v0 harness: one earnings snippet, four models via OpenRouter
 
 - **Date**: 2026-11-12
-- **Iteration**: 3
+- **Iteration**: 4
 - **Status**: Partially Implemented
 - **Deciders**: Irene Cui (human), Ledger 5.5 (Claude Opus 5.5, Claude Code)
 
@@ -203,7 +203,7 @@ v0 has to answer one question cheaply and legibly: given identical, labelled inp
 - [ ] Later step (not v0): **automatic scoring**. Every number cited, every citation correct, computed numbers derivable from cited inputs, [S4] mentioned, no unsupported operating-margin direction (trap 2).
 - [ ] Later step (not v0): **SEC EDGAR fetching**, replacing the fictional snippet with real filings. This needs a labelling step that turns a filing into [S#] facts.
 - [ ] Later step (not v0): **price prediction**. It's a different question from summarization and will need its own ADR on evaluation, since look-ahead leakage is the classic trap.
-- [ ] Unverified assumption: OpenRouter returns `usage.cost` in the response body. Verify on the first live call.
+- [x] ~~Unverified assumption: OpenRouter returns `usage.cost`~~ Verified on the first live run (Iteration 4).
 - [ ] Unverified assumption: the DeepSeek provider pin (`order: ["deepinfra"]` + `quantizations: ["fp8"]`) lands on the `deepinfra/fp8` endpoint, not `deepinfra/fp8/flex` or `/priority`. Check the reported provider on the first call. If it's ambiguous, pin by endpoint tag instead.
 - [x] ~~Unconfirmed: the $9.00 budget stop line~~ Approved by Irene, 2026-11-12. The fictional company was confirmed in her QST-OUTPUT answer. The DeepInfra fp8 pin was also confirmed the same day.
 - [ ] Concern: model IDs and prices drift. The price scan is dated, so re-check before each new trio.
@@ -217,7 +217,8 @@ v0 has to answer one question cheaply and legibly: given identical, labelled inp
 - [x] Review the snippet and question drafts (Supporting Materials) - Owner: Irene (approved 2026-11-12; added trap 2, question unchanged)
 - [x] Build `showdown.py` + `models.toml` (4 models, DeepSeek pin) + `inputs/` - Owner: Ledger 5.5 (2026-11-12)
 - [x] Tests: budget guard refuses past $9.00; key-leak scan over `runs/`; add `uv run pytest` to `just gate` - Owner: Ledger 5.5 (2026-11-12, 10 tests)
-- [ ] First live run (est. < $0.01); verify `usage.cost` and the DeepSeek provider; record actual costs in Iteration 3 - Owner: Ledger 5.5
+- [x] First live run; verify `usage.cost` and the DeepSeek provider; record actual costs - Owner: Ledger 5.5 (Iteration 4: $0.001994; usage.cost verified; endpoint tag not observable)
+- [ ] Get one GPT-6 Luna answer (it was rate-limited on run 1) - Owner: Ledger 5.5, on Irene's go
 
 ---
 
@@ -247,6 +248,21 @@ v0 has to answer one question cheaply and legibly: given identical, labelled inp
 - Contributors: Ledger 5.5
 - Changes: `showdown.py` (stdlib only: urllib + tomllib), `models.toml`, `inputs/snippet.txt` + `inputs/question.txt` (verbatim from the COD drafts above), `tests/test_showdown.py` (10 tests), `pytest` wired into `just gate`. Every file the script writes goes through `safe_write()`, which refuses any text containing the key's value or a key-shaped string. That is defense in depth on top of the committed-runs scan Irene required. `--dry-run` checks the budget without a key or any API call.
 - Outcome: `Accepted → Partially Implemented`; the live run waits on Irene's snippet/question review
+
+### Iteration 4 (2026-11-12)
+- Trigger: first live run, `runs/2026-11-13T010936Z` (UTC stamp; evening of 2026-11-12 ET), after Irene approved the inputs and added trap 2
+- Contributors: Irene Cui (input review, trap 2), Ledger 5.5 (run, fix, write-up)
+- Changes / findings:
+  - **Cost**: $0.001994 for the run, against an estimate of ≤ $0.0118. `usage.cost` is present in every successful response, so the assumption is verified and the list-price fallback was never used.
+  - **GPT-6 Luna failed**: rate-limited upstream. It arrived as HTTP 200 with `{"error": {"code": 429}}` in the body. It stayed visible as FAILED, as designed.
+  - **Privacy catch**: that rate-limit message embedded Irene's **OpenRouter workspace slug** in a URL. It was written into the JSON and `comparison.md` and caught at pre-commit review. It isn't a key, so the key scan rightly passed it. Fixed: `safe_write()` now redacts the slug, the committed-runs scan flags unredacted slugs, and a regression test was verified to fail on the old code. The existing run was cleaned with `scripts/ephemeral/2026-11-12-redact-run-workspace-slug.py`.
+  - **Vendor defaults are visible in the data**: reasoning tokens were Gemini 0, Haiku 640, DeepSeek 1,675. This is the confound accepted under QST-RUN-SETTINGS = A, now measured. Prompt tokens also differ (275 / 291 / 360) for identical text, because each vendor's tokenizer differs.
+  - **Traps (n = 1, 3 models; read by Ledger, an Anthropic model, so weigh the Haiku reading accordingly)**:
+    - *Trap 2 (over-inference)*: none of the three claimed operating margin improved. Haiku said explicitly that the snippet has no prior-year operating figures. Gemini and DeepSeek stayed silent on it.
+    - *[S4] (omission)*: all three mentioned the charge. Only Haiku derived the 13.7% ex-charge margin, labelling it a computed, non-reported figure. Gemini mentioned it with no interpretation. DeepSeek restated it.
+    - *Style*: DeepSeek spent 1,675 reasoning tokens and then output a near-verbatim transcription with a label on every number. That's perfect citation, with no analysis.
+  - **DeepSeek pin**: the response reports provider "DeepInfra" but not the endpoint tag or quantization, so `fp8` vs `fp8/flex` can't be confirmed from the response alone.
+- Outcome: still `Partially Implemented` until GPT-6 Luna has answered at least once
 
 ---
 
