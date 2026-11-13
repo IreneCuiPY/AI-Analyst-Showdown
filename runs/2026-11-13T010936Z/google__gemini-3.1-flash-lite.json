@@ -1,0 +1,84 @@
+{
+  "model_requested": "google/gemini-3.1-flash-lite",
+  "model_served": "google/gemini-3.1-flash-lite",
+  "provider": "Google",
+  "started_at": "2026-11-13T01:09:42+00:00",
+  "latency_s": 1.4,
+  "http_status": 200,
+  "error": null,
+  "finish_reason": "stop",
+  "usage": {
+    "prompt_tokens": 291,
+    "completion_tokens": 291,
+    "reasoning_tokens": 0
+  },
+  "cost_usd": 0.00050925,
+  "cost_source": "openrouter usage.cost",
+  "text": "Halvern Instruments, Inc. reported strong growth for Q3 FY2026:\n\n*   **Revenue:** Totaled $412.6 million [S1], representing an 8.4% increase from the $380.6 million reported in Q3 FY2025 [S1].\n*   **Profitability:** Gross margin improved to 41.2%, up from 39.8% in the prior-year period [S2]. Operating income reached $52.3 million [S3], reflecting a 12.7% operating margin [S3]. This performance included a $4.1 million one-time restructuring charge [S4].\n*   **Net Income and EPS:** Net income rose to $38.9 million ($1.17 per diluted share) from $33.1 million ($0.99 per diluted share) in Q3 FY2025 [S5].\n*   **Cash Flow:** The company generated $41.0 million in free cash flow [S6].\n*   **Forward-Looking Guidance:** Halvern projects Q4 FY2026 revenue to be between $420 million and $435 million [S7], with full-year diluted EPS expected in the range of $4.40 to $4.55 [S7].",
+  "request": {
+    "model": "google/gemini-3.1-flash-lite",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Halvern Instruments, Inc. (fictional) — Q3 FY2026 results\n\n[S1] Revenue was $412.6 million, up 8.4% from $380.6 million in Q3 FY2025.\n[S2] Gross margin was 41.2%, compared with 39.8% a year earlier.\n[S3] Operating income was $52.3 million, an operating margin of 12.7%.\n[S4] Operating expenses include a one-time restructuring charge of $4.1 million.\n[S5] Net income was $38.9 million, or $1.17 per diluted share, versus $33.1 million, or $0.99, a year earlier.\n[S6] Free cash flow was $41.0 million.\n[S7] Guidance: Q4 FY2026 revenue of $420–$435 million; full-year diluted EPS of $4.40–$4.55.\n\nUsing only the earnings snippet above, summarize this quarter's results.\nCite the source label (e.g. [S1]) for every number you state.\nIf you compute a number that is not in the snippet, show the inputs and cite their labels.\n"
+      }
+    ],
+    "usage": {
+      "include": true
+    }
+  },
+  "response": {
+    "id": "gen-1794532182-hOuFGSjZJGmiFE9nmBOw",
+    "object": "chat.completion",
+    "created": 1794532182,
+    "model": "google/gemini-3.1-flash-lite",
+    "provider": "Google",
+    "system_fingerprint": null,
+    "service_tier": "default",
+    "choices": [
+      {
+        "index": 0,
+        "logprobs": null,
+        "finish_reason": "stop",
+        "native_finish_reason": "STOP",
+        "message": {
+          "role": "assistant",
+          "content": "Halvern Instruments, Inc. reported strong growth for Q3 FY2026:\n\n*   **Revenue:** Totaled $412.6 million [S1], representing an 8.4% increase from the $380.6 million reported in Q3 FY2025 [S1].\n*   **Profitability:** Gross margin improved to 41.2%, up from 39.8% in the prior-year period [S2]. Operating income reached $52.3 million [S3], reflecting a 12.7% operating margin [S3]. This performance included a $4.1 million one-time restructuring charge [S4].\n*   **Net Income and EPS:** Net income rose to $38.9 million ($1.17 per diluted share) from $33.1 million ($0.99 per diluted share) in Q3 FY2025 [S5].\n*   **Cash Flow:** The company generated $41.0 million in free cash flow [S6].\n*   **Forward-Looking Guidance:** Halvern projects Q4 FY2026 revenue to be between $420 million and $435 million [S7], with full-year diluted EPS expected in the range of $4.40 to $4.55 [S7].",
+          "refusal": null,
+          "reasoning": null,
+          "reasoning_details": [
+            {
+              "type": "reasoning.encrypted",
+              "data": "AY89a18kB2CCGbZz6w641+YKybVC4pP37P39MonEacN2mU2uzIe5yHQaTwMu3Rn3Uxjs+A8/4phzY3iNccua5R//6dI2o5uHrWDMFrlgilgDRi4O+NGeIVoTElw=",
+              "format": "google-gemini-v1",
+              "index": 0
+            }
+          ]
+        }
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 291,
+      "completion_tokens": 291,
+      "total_tokens": 582,
+      "cost": 0.00050925,
+      "is_byok": false,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": 0,
+        "audio_tokens": 0,
+        "video_tokens": 0
+      },
+      "cost_details": {
+        "upstream_inference_cost": 0.00050925,
+        "upstream_inference_prompt_cost": 7.275e-05,
+        "upstream_inference_completions_cost": 0.0004365
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 0,
+        "image_tokens": 0,
+        "audio_tokens": 0
+      }
+    }
+  }
+}

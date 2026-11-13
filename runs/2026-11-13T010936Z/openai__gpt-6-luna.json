@@ -1,0 +1,40 @@
+{
+  "model_requested": "openai/gpt-6-luna",
+  "model_served": null,
+  "provider": null,
+  "started_at": "2026-11-13T01:09:42+00:00",
+  "latency_s": 0.61,
+  "http_status": 200,
+  "error": "error: openai/gpt-6-luna is temporarily rate-limited upstream. Please retry shortly, or add your own provider key to use your own limits: https://openrouter.ai/workspaces/<redacted>/byok",
+  "finish_reason": null,
+  "usage": {
+    "prompt_tokens": null,
+    "completion_tokens": null,
+    "reasoning_tokens": null
+  },
+  "cost_usd": null,
+  "cost_source": null,
+  "text": null,
+  "request": {
+    "model": "openai/gpt-6-luna",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Halvern Instruments, Inc. (fictional) — Q3 FY2026 results\n\n[S1] Revenue was $412.6 million, up 8.4% from $380.6 million in Q3 FY2025.\n[S2] Gross margin was 41.2%, compared with 39.8% a year earlier.\n[S3] Operating income was $52.3 million, an operating margin of 12.7%.\n[S4] Operating expenses include a one-time restructuring charge of $4.1 million.\n[S5] Net income was $38.9 million, or $1.17 per diluted share, versus $33.1 million, or $0.99, a year earlier.\n[S6] Free cash flow was $41.0 million.\n[S7] Guidance: Q4 FY2026 revenue of $420–$435 million; full-year diluted EPS of $4.40–$4.55.\n\nUsing only the earnings snippet above, summarize this quarter's results.\nCite the source label (e.g. [S1]) for every number you state.\nIf you compute a number that is not in the snippet, show the inputs and cite their labels.\n"
+      }
+    ],
+    "usage": {
+      "include": true
+    }
+  },
+  "response": {
+    "id": "gen-1794532182-9TB7QZLiHZAbCj5DXA8u",
+    "error": {
+      "message": "openai/gpt-6-luna is temporarily rate-limited upstream. Please retry shortly, or add your own provider key to use your own limits: https://openrouter.ai/workspaces/<redacted>/byok",
+      "code": 429,
+      "metadata": {
+        "error_type": "rate_limit_exceeded"
+      }
+    }
+  }
+}

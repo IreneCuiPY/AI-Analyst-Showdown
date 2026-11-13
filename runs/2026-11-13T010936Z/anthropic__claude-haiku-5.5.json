@@ -1,0 +1,84 @@
+{
+  "model_requested": "anthropic/claude-haiku-5.5",
+  "model_served": "anthropic/claude-haiku-5.5",
+  "provider": "Claude Platform on AWS",
+  "started_at": "2026-11-13T01:09:36+00:00",
+  "latency_s": 5.45,
+  "http_status": 200,
+  "error": null,
+  "finish_reason": "stop",
+  "usage": {
+    "prompt_tokens": 360,
+    "completion_tokens": 1236,
+    "reasoning_tokens": 640
+  },
+  "cost_usd": 0.000654,
+  "cost_source": "openrouter usage.cost",
+  "text": "**Halvern Instruments, Q3 FY2026 summary**\n\n- **Revenue** grew 8.4% year over year to $412.6 million, from $380.6 million a year earlier [S1].\n- **Gross margin** was 41.2%, up from 39.8% a year earlier [S2]. That is an improvement of 1.4 percentage points (41.2% − 39.8%) [S2].\n- **Operating income** was $52.3 million, a 12.7% operating margin [S3]. Operating expenses include a one-time restructuring charge of $4.1 million [S4]. Excluding that charge, operating income would be $56.4 million ($52.3M + $4.1M) [S3, S4], or a 13.7% margin ($56.4M ÷ $412.6M) [S1, S3, S4]. This is a non-GAAP-style adjustment I computed, not a figure the company reported.\n- **Net income** was $38.9 million, or $1.17 per diluted share, compared with $33.1 million, or $0.99, a year earlier [S5]. That is growth of about 17.5% in net income ($38.9M ÷ $33.1M − 1) and about 18.2% in diluted EPS ($1.17 ÷ $0.99 − 1) [S5].\n- **Free cash flow** was $41.0 million [S6]. This is about 105% of net income ($41.0M ÷ $38.9M) [S5, S6].\n- **Guidance:** Q4 FY2026 revenue is expected at $420–$435 million, and full-year diluted EPS at $4.40–$4.55 [S7].\n\nThe snippet does not give prior-year operating income or margin, so I can't compare operating profitability year over year. It also lacks year-to-date figures, so I can't check the full-year EPS guidance against results to date.",
+  "request": {
+    "model": "anthropic/claude-haiku-5.5",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Halvern Instruments, Inc. (fictional) — Q3 FY2026 results\n\n[S1] Revenue was $412.6 million, up 8.4% from $380.6 million in Q3 FY2025.\n[S2] Gross margin was 41.2%, compared with 39.8% a year earlier.\n[S3] Operating income was $52.3 million, an operating margin of 12.7%.\n[S4] Operating expenses include a one-time restructuring charge of $4.1 million.\n[S5] Net income was $38.9 million, or $1.17 per diluted share, versus $33.1 million, or $0.99, a year earlier.\n[S6] Free cash flow was $41.0 million.\n[S7] Guidance: Q4 FY2026 revenue of $420–$435 million; full-year diluted EPS of $4.40–$4.55.\n\nUsing only the earnings snippet above, summarize this quarter's results.\nCite the source label (e.g. [S1]) for every number you state.\nIf you compute a number that is not in the snippet, show the inputs and cite their labels.\n"
+      }
+    ],
+    "usage": {
+      "include": true
+    }
+  },
+  "response": {
+    "id": "gen-1794532176-ff3ZXS90jQcUz8QJWObX",
+    "object": "chat.completion",
+    "created": 1794532176,
+    "model": "anthropic/claude-haiku-5.5",
+    "provider": "Claude Platform on AWS",
+    "system_fingerprint": null,
+    "service_tier": "default",
+    "choices": [
+      {
+        "index": 0,
+        "logprobs": null,
+        "finish_reason": "stop",
+        "native_finish_reason": "end_turn",
+        "message": {
+          "role": "assistant",
+          "content": "**Halvern Instruments, Q3 FY2026 summary**\n\n- **Revenue** grew 8.4% year over year to $412.6 million, from $380.6 million a year earlier [S1].\n- **Gross margin** was 41.2%, up from 39.8% a year earlier [S2]. That is an improvement of 1.4 percentage points (41.2% − 39.8%) [S2].\n- **Operating income** was $52.3 million, a 12.7% operating margin [S3]. Operating expenses include a one-time restructuring charge of $4.1 million [S4]. Excluding that charge, operating income would be $56.4 million ($52.3M + $4.1M) [S3, S4], or a 13.7% margin ($56.4M ÷ $412.6M) [S1, S3, S4]. This is a non-GAAP-style adjustment I computed, not a figure the company reported.\n- **Net income** was $38.9 million, or $1.17 per diluted share, compared with $33.1 million, or $0.99, a year earlier [S5]. That is growth of about 17.5% in net income ($38.9M ÷ $33.1M − 1) and about 18.2% in diluted EPS ($1.17 ÷ $0.99 − 1) [S5].\n- **Free cash flow** was $41.0 million [S6]. This is about 105% of net income ($41.0M ÷ $38.9M) [S5, S6].\n- **Guidance:** Q4 FY2026 revenue is expected at $420–$435 million, and full-year diluted EPS at $4.40–$4.55 [S7].\n\nThe snippet does not give prior-year operating income or margin, so I can't compare operating profitability year over year. It also lacks year-to-date figures, so I can't check the full-year EPS guidance against results to date.",
+          "refusal": null,
+          "reasoning": null,
+          "reasoning_details": [
+            {
+              "type": "reasoning.text",
+              "signature": "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.eyJlbmRwb2ludF9zbHVnIjoiYW50aHJvcGljL2NsYXVkZS1oYWlrdS01LjUtMjAyNjEwMDd8Y2xhdWRlLW9uLWF3cyJ9",
+              "format": "anthropic-claude-v1",
+              "index": 0
+            }
+          ]
+        }
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 360,
+      "completion_tokens": 1236,
+      "total_tokens": 1596,
+      "cost": 0.000654,
+      "is_byok": false,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": 0,
+        "audio_tokens": 0,
+        "video_tokens": 0
+      },
+      "cost_details": {
+        "upstream_inference_cost": 0.000654,
+        "upstream_inference_prompt_cost": 3.6e-05,
+        "upstream_inference_completions_cost": 0.000618
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 640,
+        "image_tokens": 0,
+        "audio_tokens": 0
+      }
+    }
+  }
+}
