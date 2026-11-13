@@ -7,3 +7,5 @@
 # Python temporary files
 __pycache__/
 *.py[cod]
+# ADR Manager extension working state (draft answers, local only)
+docs/adr/.working/

@@ -19,14 +19,24 @@
         "statusBar.background": "#3ca7ac",
         "statusBar.foreground": "#15202b",
         "statusBarItem.hoverBackground": "#2f8286",
-        "statusBarItem.remoteBackground": "#3ca7ac",
+        "statusBarItem.remoteBackground": "#efd0ed",
         "statusBarItem.remoteForeground": "#15202b",
         "titleBar.activeBackground": "#3ca7ac",
         "titleBar.activeForeground": "#15202b",
         "titleBar.inactiveBackground": "#3ca7ac99",
-        "titleBar.inactiveForeground": "#15202b99"
+        "titleBar.inactiveForeground": "#15202b99",
+        "activityBar.activeBorder": "#15202b",
+        "activityBarTop.activeBackground": "#57bfc4",
+        "activityBarTop.activeBorder": "#15202b",
+        "activityBarTop.background": "#57bfc4",
+        "activityBarTop.foreground": "#15202b",
+        "activityBarTop.inactiveForeground": "#15202b99",
+        "commandCenter.foreground": "#15202b",
+        "statusBar.debuggingBackground": "#3ca7ac",
+        "statusBar.debuggingForeground": "#15202b",
+        "statusBar.inactiveBackground": "#3ca7ac"
     },
-    "peacock.color": "",
+    "peacock.color": "#3ca7ac",
     "python.terminal.activateEnvironment": false,
     "terminal.integrated.env.osx": {
         "PATH": "/opt/homebrew/bin:${env:HOME}/.asdf/shims:${env:PATH}"
