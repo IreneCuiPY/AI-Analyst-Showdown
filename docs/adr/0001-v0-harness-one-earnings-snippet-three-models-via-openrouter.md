@@ -140,7 +140,16 @@ Halvern Instruments, Inc. (fictional) — Q3 FY2026 results
 [S7] Guidance: Q4 FY2026 revenue of $420–$435 million; full-year diluted EPS of $4.40–$4.55.
 ```
 
-[S4] is deliberate: a careful analyst should mention it when interpreting [S3]. It gives the comparison something beyond copying numbers.
+The snippet contains **two deliberate traps**:
+
+1. **[S4], the omission test.** The restructuring charge sits inside [S3]'s operating income. A careful analyst mentions it when interpreting [S3]. A derived figure is supported if shown: excluding the charge, operating margin is (52.3 + 4.1) / 412.6 = 13.7%, citing [S3], [S4] and [S1].
+2. **No prior-year operating figures, the over-inference test** (added by Irene, 2026-11-12). The snippet gives no prior-year operating income or operating margin, so **any claim that operating margin "improved," "expanded," or "rose" is unsupported**. The question deliberately does *not* warn about this. Irene wants to see whether models over-infer unprompted. Where the line sits, so a later scoring step doesn't over-penalize:
+   - *Supported*: gross margin improved, 39.8% → 41.2% [S2] (stated outright).
+   - *Supported if derived*: net margin improved, 33.1 / 380.6 = 8.7% → 38.9 / 412.6 = 9.4%, citing [S1] and [S5]. Net income grew 17.5% [S5].
+   - *Unsupported*: any year-over-year direction for operating income or operating margin. "Operating margin was 12.7%" [S3] is fine; "operating margin improved to 12.7%" is the trap.
+   - *Tempting bridge, still unsupported*: "gross margin rose, so operating margin likely rose too." That is inference about the business, not a fact in the snippet. A model may offer it only if it says it's an inference.
+
+Irene's review, 2026-11-12: figures check out (+8.4%, 12.7%, EPS share counts plausible: 38.9 / 1.17 ≈ 33.2M vs 33.1 / 0.99 ≈ 33.4M diluted shares). The question is unchanged.
 
 ### COD: question-draft
 ```text
@@ -191,7 +200,7 @@ v0 has to answer one question cheaply and legibly: given identical, labelled inp
 
 ## Open Follow-ups
 
-- [ ] Later step (not v0): **automatic scoring**. Every number cited, every citation correct, computed numbers derivable from cited inputs, [S4] mentioned.
+- [ ] Later step (not v0): **automatic scoring**. Every number cited, every citation correct, computed numbers derivable from cited inputs, [S4] mentioned, no unsupported operating-margin direction (trap 2).
 - [ ] Later step (not v0): **SEC EDGAR fetching**, replacing the fictional snippet with real filings. This needs a labelling step that turns a filing into [S#] facts.
 - [ ] Later step (not v0): **price prediction**. It's a different question from summarization and will need its own ADR on evaluation, since look-ahead leakage is the classic trap.
 - [ ] Unverified assumption: OpenRouter returns `usage.cost` in the response body. Verify on the first live call.
@@ -205,7 +214,7 @@ v0 has to answer one question cheaply and legibly: given identical, labelled inp
 
 - [x] Answer QST-MODEL-TRIO, QST-RUN-SETTINGS, QST-OUTPUT - Owner: Irene (done 2026-11-12)
 - [x] Approve the $9.00 stop line and the DeepInfra pin - Owner: Irene (approved 2026-11-12)
-- [ ] Review the snippet and question drafts (Supporting Materials). **Blocks the first live run**; the code can be built meanwhile - Owner: Irene
+- [x] Review the snippet and question drafts (Supporting Materials) - Owner: Irene (approved 2026-11-12; added trap 2, question unchanged)
 - [x] Build `showdown.py` + `models.toml` (4 models, DeepSeek pin) + `inputs/` - Owner: Ledger 5.5 (2026-11-12)
 - [x] Tests: budget guard refuses past $9.00; key-leak scan over `runs/`; add `uv run pytest` to `just gate` - Owner: Ledger 5.5 (2026-11-12, 10 tests)
 - [ ] First live run (est. < $0.01); verify `usage.cost` and the DeepSeek provider; record actual costs in Iteration 3 - Owner: Ledger 5.5
