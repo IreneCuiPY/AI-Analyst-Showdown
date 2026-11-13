@@ -196,7 +196,7 @@ v0 has to answer one question cheaply and legibly: given identical, labelled inp
 - [ ] Later step (not v0): **price prediction**. It's a different question from summarization and will need its own ADR on evaluation, since look-ahead leakage is the classic trap.
 - [ ] Unverified assumption: OpenRouter returns `usage.cost` in the response body. Verify on the first live call.
 - [ ] Unverified assumption: the DeepSeek provider pin (`order: ["deepinfra"]` + `quantizations: ["fp8"]`) lands on the `deepinfra/fp8` endpoint, not `deepinfra/fp8/flex` or `/priority`. Check the reported provider on the first call. If it's ambiguous, pin by endpoint tag instead.
-- [ ] Unconfirmed: the $9.00 budget stop line (Explicitation → Assumptions) was asked in prose, not as a question, so silence isn't consent. Irene's QST-OUTPUT answer did confirm the fictional company.
+- [x] ~~Unconfirmed: the $9.00 budget stop line~~ Approved by Irene, 2026-11-12. The fictional company was confirmed in her QST-OUTPUT answer. The DeepInfra fp8 pin was also confirmed the same day.
 - [ ] Concern: model IDs and prices drift. The price scan is dated, so re-check before each new trio.
 
 ---
@@ -204,7 +204,8 @@ v0 has to answer one question cheaply and legibly: given identical, labelled inp
 ## Action Items
 
 - [x] Answer QST-MODEL-TRIO, QST-RUN-SETTINGS, QST-OUTPUT - Owner: Irene (done 2026-11-12)
-- [ ] Glance at the snippet and question drafts (Supporting Materials) and the $9.00 stop line; object or say nothing - Owner: Irene
+- [x] Approve the $9.00 stop line and the DeepInfra pin - Owner: Irene (approved 2026-11-12)
+- [ ] Review the snippet and question drafts (Supporting Materials). **Blocks the first live run**; the code can be built meanwhile - Owner: Irene
 - [ ] Build `showdown.py` + `models.toml` (4 models, DeepSeek pin) + `inputs/` - Owner: Ledger 5.5
 - [ ] Tests: budget guard refuses past $9.00; key-leak scan over `runs/`; add `uv run pytest` to `just gate` - Owner: Ledger 5.5
 - [ ] First live run (est. < $0.01); verify `usage.cost` and the DeepSeek provider; record actual costs in Iteration 3 - Owner: Ledger 5.5
