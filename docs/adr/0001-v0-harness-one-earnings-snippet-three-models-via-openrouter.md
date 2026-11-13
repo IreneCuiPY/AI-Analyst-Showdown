@@ -9,8 +9,8 @@ adr teaching map: the example is not the teaching — these are the up-links fro
 # v0 harness: one earnings snippet, four models via OpenRouter
 
 - **Date**: 2026-11-12
-- **Iteration**: 2
-- **Status**: Accepted
+- **Iteration**: 3
+- **Status**: Partially Implemented
 - **Deciders**: Irene Cui (human), Ledger 5.5 (Claude Opus 5.5, Claude Code)
 
 **TL;DR**: v0 sends one fixed, fictional, source-labelled earnings snippet and one fixed question to four cheap models through OpenRouter, with vendor-default settings: Claude Haiku 5.5, GPT-6 Luna, Gemini 3.1 Flash Lite, and DeepSeek V4.1 Flash pinned to one provider. It saves each raw response with provider, tokens and cost, and commits the runs plus a Markdown comparison, but only behind a key-leak test.
@@ -184,7 +184,7 @@ v0 has to answer one question cheaply and legibly: given identical, labelled inp
 
 ### Consequences
 - **"Parameters actually used" is only partly observable.** With vendor defaults we send no parameters, and providers don't report the effective temperature. We *can* record what we sent, the provider and model actually served, the reasoning token count (which shows whether thinking happened), and the finish reason. The comparison table will say this rather than imply more.
-- The budget guard can't bound output with `max_tokens` (not sent, under A). It estimates conservatively instead: 4,000 output tokens per model at list price, which is ≤ $0.01 per four-model run. The $9.00 stop line is unchanged.
+- The budget guard can't bound output with `max_tokens` (not sent, under A). It estimates conservatively instead: 4,000 output tokens per model at list price, which comes to $0.0118 per four-model run (`--dry-run`, 2026-11-12; Iteration 2 said "≤ $0.01", but the real arithmetic is slightly higher). The $9.00 stop line is unchanged.
 - The `runs/` key-leak test is part of the gate from the first commit that adds `runs/`.
 
 ---
@@ -206,8 +206,8 @@ v0 has to answer one question cheaply and legibly: given identical, labelled inp
 - [x] Answer QST-MODEL-TRIO, QST-RUN-SETTINGS, QST-OUTPUT - Owner: Irene (done 2026-11-12)
 - [x] Approve the $9.00 stop line and the DeepInfra pin - Owner: Irene (approved 2026-11-12)
 - [ ] Review the snippet and question drafts (Supporting Materials). **Blocks the first live run**; the code can be built meanwhile - Owner: Irene
-- [ ] Build `showdown.py` + `models.toml` (4 models, DeepSeek pin) + `inputs/` - Owner: Ledger 5.5
-- [ ] Tests: budget guard refuses past $9.00; key-leak scan over `runs/`; add `uv run pytest` to `just gate` - Owner: Ledger 5.5
+- [x] Build `showdown.py` + `models.toml` (4 models, DeepSeek pin) + `inputs/` - Owner: Ledger 5.5 (2026-11-12)
+- [x] Tests: budget guard refuses past $9.00; key-leak scan over `runs/`; add `uv run pytest` to `just gate` - Owner: Ledger 5.5 (2026-11-12, 10 tests)
 - [ ] First live run (est. < $0.01); verify `usage.cost` and the DeepSeek provider; record actual costs in Iteration 3 - Owner: Ledger 5.5
 
 ---
@@ -232,6 +232,12 @@ v0 has to answer one question cheaply and legibly: given identical, labelled inp
 - Contributors: Irene Cui (answers), Ledger 5.5 (processing)
 - Changes: four models instead of three (Irene's override of my A recommendation, adding B's DeepSeek); vendor defaults instead of my recommended pinned settings (her A over my B); committed Markdown with a mandatory key-leak test (A, as recommended, plus her gate condition). I chose the DeepSeek provider after listing its 38 OpenRouter endpoints (DOC: deepseek-v4.1-flash-providers). Decision section filled.
 - Outcome: `Draft → Accepted`; implementation next
+
+### Iteration 3 (2026-11-12)
+- Trigger: Irene: "start building"
+- Contributors: Ledger 5.5
+- Changes: `showdown.py` (stdlib only: urllib + tomllib), `models.toml`, `inputs/snippet.txt` + `inputs/question.txt` (verbatim from the COD drafts above), `tests/test_showdown.py` (10 tests), `pytest` wired into `just gate`. Every file the script writes goes through `safe_write()`, which refuses any text containing the key's value or a key-shaped string. That is defense in depth on top of the committed-runs scan Irene required. `--dry-run` checks the budget without a key or any API call.
+- Outcome: `Accepted → Partially Implemented`; the live run waits on Irene's snippet/question review
 
 ---
 
