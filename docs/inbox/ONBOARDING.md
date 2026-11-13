@@ -59,7 +59,7 @@ the tmux hive.
 
 ## 1. What this project is
 
-A small local harness (Python 3.12, macOS) that sends the same company-earnings information and the same question to several LLMs through OpenRouter, saves each raw response with tokens and cost, and produces a comparison a human can read. It grows step by step from v0, one fixed source-labelled snippet and three models, under a $10 total API budget. This public repo holds both the code and the decision record. The `OPENROUTER_API_KEY` is read from the environment only, and is never printed, logged, or committed.
+A small local harness (Python 3.12, macOS) that sends the same company-earnings information and the same question to several LLMs through OpenRouter, saves each raw response with tokens and cost, and produces a comparison a human can read. It grows step by step from v0, one fixed source-labelled snippet and four models, under a $10 total API budget. This public repo holds both the code and the decision record. The `OPENROUTER_API_KEY` is read from the environment only, and is never printed, logged, or committed.
 
 **Read first**, in order:
 1. `CLAUDE.md` — directives, project context, workflow

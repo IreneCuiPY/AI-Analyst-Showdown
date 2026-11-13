@@ -92,7 +92,7 @@ Before serving any change:
 2. Fix any failures before committing
 3. Never serve changes with a failing gate
 
-**Why**: Today (pre-code) `just gate` catches unfilled template placeholders and crew-registry errors, and nothing more. Once v0 code lands (ADR-0001), the gate adds `uv run pytest`, covering the two failures that would actually hurt here: the **budget guard** letting spend pass the $10 cap, and the **API key leaking** into any saved run file in this public repo. The gate does not make live API calls; those cost money and are run deliberately.
+**Why**: `just gate` checks that no template placeholders are left unfilled and that the crew registry is valid. It then runs `uv run pytest`, which covers the failures that would actually hurt here: the **budget guard** letting spend pass the $9.00 stop line, the **API key leaking** into any file under `runs/` (this repo is public, and Irene requires this check to pass before any run is committed), a failed model silently **vanishing** from the comparison, and the request drifting from ADR-0001's same-prompt, vendor-default contract. The gate makes no live API calls; those cost money and are run deliberately (`uv run showdown.py`).
 
 **Process**:
 ```bash
@@ -246,13 +246,13 @@ If the script was successfully used, append as comments how, and what the outcom
 ## Project Context
 
 ### What we're building:
-A small local harness (Python 3.12, macOS) that sends the same company-earnings information and the same question to several LLMs through OpenRouter, saves each raw response with tokens and cost, and produces a comparison a human can read. It grows step by step from v0, one fixed source-labelled snippet and three models, under a $10 total API budget. This public repo holds both the code and the decision record. The `OPENROUTER_API_KEY` is read from the environment only, and is never printed, logged, or committed.
+A small local harness (Python 3.12, macOS) that sends the same company-earnings information and the same question to several LLMs through OpenRouter, saves each raw response with tokens and cost, and produces a comparison a human can read. It grows step by step from v0, one fixed source-labelled snippet and four models, under a $10 total API budget. This public repo holds both the code and the decision record. The `OPENROUTER_API_KEY` is read from the environment only, and is never printed, logged, or committed.
 
 ### Current focus:
-v0: settling ADR-0001's three questions (model trio, run settings, output location) before writing any code.
+v0: harness built (ADR-0001, Partially Implemented). The first live run waits on Irene's review of `inputs/`.
 
 ### Key decisions made:
-- v0 harness scope (in progress, three open questions): see `docs/adr/0001-v0-harness-one-earnings-snippet-three-models-via-openrouter.md`
+- v0 harness: four models (Haiku 5.5, GPT-6 Luna, Gemini 3.1 Flash Lite, DeepSeek V4.1 Flash pinned to DeepInfra fp8), vendor defaults, committed Markdown runs behind a key-leak test. See `docs/adr/0001-v0-harness-one-earnings-snippet-three-models-via-openrouter.md`
 
 ### Open questions:
 ```bash
