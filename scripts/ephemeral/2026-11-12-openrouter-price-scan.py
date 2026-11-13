@@ -70,8 +70,22 @@ def detail(path, ids):
               f"  reasoning={'reasoning' in sp}  {mid}  ({m.get('name')})")
 
 
+def endpoints(path):
+    """Third mode: providers serving one model, from a saved copy of the public
+    /api/v1/models/<author>/<slug>/endpoints listing. Used to pin DeepSeek
+    to one provider (Irene's QST-MODEL-TRIO answer)."""
+    for e in json.load(open(path))["data"]["endpoints"]:
+        p = e["pricing"]
+        print(f"   {e.get('provider_name', '?'):<16} tag={e.get('tag', ''):<26}"
+              f" quant={e.get('quantization')}  ${per_million(p['prompt']):.3f} in"
+              f" / ${per_million(p['completion']):.3f} out  ctx={e.get('context_length')}"
+              f"  uptime30m={e.get('uptime_last_30m')}")
+
+
 if __name__ == "__main__":
-    if len(sys.argv) > 2:
+    if len(sys.argv) == 3 and sys.argv[1] == "--endpoints":
+        endpoints(sys.argv[2])
+    elif len(sys.argv) > 2:
         detail(sys.argv[1], sys.argv[2:])
     else:
         main(sys.argv[1])
@@ -80,3 +94,6 @@ if __name__ == "__main__":
 # $0.00004–$0.002 for the cheapest per vendor, so the $10 budget does not
 # constrain model choice at v0; ":batch" variants are excluded from consideration
 # (asynchronous batch pricing, not a plain chat call). Fed QST-MODEL-TRIO in ADR-0001.
+# --endpoints mode (same day): deepseek/deepseek-v4.1-flash has 38 OpenRouter
+# endpoints, no first-party one, quantizations fp4→fp8→unknown; pinned to
+# DeepInfra fp8 per Irene's answer (ADR-0001 Iteration 2).
