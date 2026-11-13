@@ -35,6 +35,11 @@ API_URL = "https://openrouter.ai/api/v1/chat/completions"
 KEY_ENV = "OPENROUTER_API_KEY"
 # The shape of an OpenRouter key: a second net for when the key itself is unknown.
 KEY_PATTERN = re.compile(r"sk-or-[A-Za-z0-9_-]{20,}")
+# Account identifiers OpenRouter puts in error messages (e.g. a rate-limit error
+# linking to ".../workspaces/<workspace-slug>/byok"). Not secret, but they name
+# the account, and runs/ is committed to a public repo. Redacted before any write.
+ACCOUNT_ID_PATTERN = re.compile(r"(openrouter\.ai/workspaces/)[^/\s\"'<>)\]]+")
+REDACTED = "<redacted>"
 TIMEOUT_S = 180
 
 
@@ -105,17 +110,27 @@ def check_budget(spent: float, estimate: float, stop_line: float) -> None:
 
 # ── secrets ──────────────────────────────────────────────────────────────────
 
+def redact_account_ids(text: str) -> str:
+    """Replace OpenRouter account identifiers (workspace slugs in URLs) with <redacted>."""
+    return ACCOUNT_ID_PATTERN.sub(rf"\g<1>{REDACTED}", text)
+
+
 def find_secrets(text: str, key: str | None) -> list[str]:
-    """Reasons `text` is unsafe to write. Never returns the secret itself."""
+    """Reasons `text` is unsafe to write or commit. Never returns the secret itself."""
     reasons = []
     if key and key in text:
         reasons.append(f"contains the value of {KEY_ENV}")
     if KEY_PATTERN.search(text):
         reasons.append("contains an OpenRouter-key-shaped string (sk-or-...)")
+    if redact_account_ids(text) != text:
+        reasons.append("contains an unredacted OpenRouter workspace identifier")
     return reasons
 
 
 def safe_write(path: Path, text: str, key: str | None) -> None:
+    """Redact account identifiers, then refuse to write if a key or key-shaped string remains.
+    Keys are refused rather than redacted: a key in output means a bug to fix, not hide."""
+    text = redact_account_ids(text)
     reasons = find_secrets(text, key)
     if reasons:
         raise SecretLeak(f"Refusing to write {path}: {'; '.join(reasons)}")
@@ -153,10 +168,12 @@ def call_openrouter(body: dict, key: str, timeout: float = TIMEOUT_S) -> dict:
             payload = {"unparsed_body": raw}
             error = error or "response was not JSON"
     # OpenRouter can report an upstream failure inside a 200 body.
+    # (First live run: a 429 rate limit arrived as HTTP 200 with {"error": {"code": 429, ...}}.)
     if isinstance(payload, dict) and payload.get("error"):
         err = payload["error"]
         msg = err.get("message", err) if isinstance(err, dict) else err
-        error = f"{error or 'error'}: {msg}"
+        code = err.get("code") if isinstance(err, dict) else None
+        error = f"{error or 'upstream error'}{f' {code}' if code and not error else ''}: {msg}"
     return {"http_status": status, "payload": payload, "error": error, "latency_s": latency}
 
 

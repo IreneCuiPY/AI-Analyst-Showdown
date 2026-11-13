@@ -149,3 +149,34 @@ def test_every_model_gets_the_same_prompt_and_no_generation_params():
     assert [b["model"] for b in pinned] == ["deepseek/deepseek-v4.1-flash"]
     assert pinned[0]["provider"] == {"order": ["deepinfra"], "quantizations": ["fp8"],
                                      "allow_fallbacks": False}
+
+
+# ── Regression tests (CLAUDE.md, Third Directive) ────────────────────────────
+
+def test_rate_limit_error_does_not_write_workspace_name(tmp_path):
+    # Bug: the first live run (runs/2026-11-13T010936Z, 2026-11-12 ET) hit a rate
+    # limit on openai/gpt-6-luna. OpenRouter's error message linked to
+    # "https://openrouter.ai/workspaces/<workspace-slug>/byok", and the script wrote
+    # that slug verbatim into the model's JSON and comparison.md, so it was headed for
+    # a public repo. The key scan passed, correctly, since it's not a key, but it
+    # identifies the account. Caught at pre-commit review; fixed by redacting in
+    # safe_write(); the committed-runs scan now flags unredacted slugs too.
+    slug = "some-course-" + "workspace"
+    message = (f"openai/gpt-6-luna is temporarily rate-limited upstream. Please retry shortly, "
+               f"or add your own provider key to use your own limits: "
+               f"https://openrouter.ai/workspaces/{slug}/byok")
+    model = {"id": "openai/gpt-6-luna", "price_in_per_m": 0.1, "price_out_per_m": 0.5}
+    # Same shape call_openrouter() returned in the real run: HTTP 200, 429 inside the body.
+    rec = showdown.make_record(model, {}, {
+        "http_status": 200, "error": f"upstream error 429: {message}", "latency_s": 0.4,
+        "payload": {"error": {"code": 429, "message": message}, "id": "gen-x"}}, "t")
+    assert slug in rec["error"]  # the record itself still holds it; the write must strip it
+    md = showdown.render_comparison("STAMP", [rec], "s", "q", 0.0, {"total_usd": 10.0, "stop_line_usd": 9.0})
+
+    showdown.safe_write(tmp_path / "luna.json", json.dumps(rec), key=None)
+    showdown.safe_write(tmp_path / "comparison.md", md, key=None)
+    for f in tmp_path.iterdir():
+        written = f.read_text()
+        assert slug not in written
+        assert "openrouter.ai/workspaces/<redacted>/byok" in written  # message stays useful
+        assert showdown.find_secrets(written, None) == []  # and passes the commit scan
